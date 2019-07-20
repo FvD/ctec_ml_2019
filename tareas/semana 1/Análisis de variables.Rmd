@@ -1,0 +1,125 @@
+
+# Tarea 1
+
+Siga el siguiente documento y escriba el código en las secciones señaladas.
+
+### Autores
+   * Efrén Jiménez
+
+## Análisis del Problema
+Este conjunto de datos contiene precios de venta de casas para el Condado de King, que incluye Seattle. Incluye casas vendidas entre mayo de 2014 y mayo de 2015.
+
+Es un gran conjunto de datos para evaluar modelos de regresión simples. 
+
+![Proceso ROC](img/dataset-cover.jpg)
+
+## Entendimiento de los Datos
+
+Con el fin de analizar y tratar de predecir el precio de las casas ubicadas en el condado de King, se trabajó con un conjunto de datos que contiene 8273 observaciones y 2 variables:
+
+- price (precio): numérica, con un rango de 115000 a 1950000.
+- sqft_lot (metros cuadrados del lote): numérica, con un rango de 500 a 7730
+
+## Análisis del dataset
+
+Lea el dataset con la función read.csv y guardelo en una variable
+
+Ejemplo:
+
+`casas <- read.csv('kc_house_data.csv', header = T, na.strings = '?')`
+
+```{r}
+# Escriba su código aqui
+```
+
+Utilice la función summary sobre el dataset
+
+Ejemplo:
+
+`summary(casas)`
+
+```{r}
+# Escriba su código aqui
+```
+
+```{r}
+#librerías utilizadas
+library(caTools)
+
+#Librería de gráficos
+library(ggplot2)
+#Evitar mostrar warning messages
+options(warn=-1)
+```
+
+Cargue en una variable las columnas 'price' y 'sqft_living'
+
+Ejemplo
+
+`casas <-casas[,c(3,6)]`
+
+```{r}
+# Escriba su código aqui
+```
+
+Utilice la función summary sobre la nueva variable
+
+```{r}
+# Escriba su código aqui
+```
+
+Aplique la función de correlación para obtener las correlaciones entre las columnas seleccionadas (price, sqft_living)
+
+Ejemplo:
+
+`cor(casas)`
+
+```{r}
+# Escriba su código aqui
+```
+
+### Interpretando los resultados de la correlación
+
+### Tipos de relación
+- -1,00 = Correlación negativa perfecta
+- -0,90 = Correlación negativa muy fuerte
+- -0,75 = Correlación negativa considerable
+- -0,50 = Correlación negativa media
+- -0,10 = Correlación negativa débil
+- 0,00  = No existe correlación lineal alguna entre las variables
+- 0,10  = Correlación positiva débil
+- 0,50  = Correlación positiva media
+- 0,75 = Correlación positiva considerable
+- 0,90  = Correlación positiva muy fuerte
+- 1,00  = Correlación positiva perfecta
+
+Existen varios métodos para calcular la correlación, la función 'cor' permite especificar el tipo de método mediante el parámetro 'method'
+
+Ejemplo
+
+`cor(casas, method='pearson')`
+
+`cor(casas, method='spearman')`
+
+```{r}
+# Escriba su código aqui
+```
+
+### Visualización
+
+Por último vamos a visualizar los datos del dataset con respecto a las columnas anteriormente seleccionadas (price, sqft_living) para observar si existe alguna tendencia que podamos predecir.
+
+Con la función plot cree un gráfico de dispersión, asigne la columna 'price' al eje Y y la columna sqft_living al eje X
+
+Ejemplo
+
+`plot(y = casas$price,x = casas$sqft_living, main = 'Relación entre Precio y Metros cuadrados', ylab = 'price', xlab = 'sqft_living')`
+
+```{r}
+# Escriba su código aqui
+```
+
+## Conclusiones
+
+Como se puede observar tanto en la gráfica como en las correlaciones, existe una tendencia clara en el aumento del precio de las viviendas con respecto a los metros cuadrados. Con este pequeño análisis de los datos podemos elegir las variables predictoras y el modelo inicial, en este caso podemos elegir utilizar una regresión lineal simple utilizando la columna 'sqft_living' como variable predictora.
+
