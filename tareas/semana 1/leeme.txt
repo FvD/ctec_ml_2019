@@ -1,0 +1,3 @@
+Instrucciones
+
+Abra el documento Análisis de variables.Rmd en RStudio y siga las instrucciones de la tarea
