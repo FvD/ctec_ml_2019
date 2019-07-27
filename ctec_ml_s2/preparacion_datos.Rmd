@@ -9,20 +9,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 
 
-# Breve introducción a Ggpairs
+# Breve introducción a ggpairs
 
-Ggpairs es una función de la librería GGally que permite crear matrices de gráficos y es realmente útil en la etapa de análisis y exploración de los datos. Pueden encontrar más información sobre ggpairs y Ggally en el siguiente enlace https://ggobi.github.io/ggally/#ggally
+`ggpairs()` es una función de la librería GGally que permite crear matrices de gráficos y es realmente útil en la etapa de análisis y exploración de los datos. Pueden encontrar más información sobre `ggpairs()` y GGally en el siguiente enlace https://ggobi.github.io/ggally/#ggally
 
 El siguiente ejemplo muestra el gráfico de las correlaciones y densidades de algunos atributos del dataset de ventas de casas.
 
 ```{r}
-install.packages("ggplot2")
-install.packages("GGally")
 library(GGally)
 library(ggplot2)
 
 casas <- read.csv('kc_house_data.csv', header = T, na.strings = '?')
-ggpairs(casas, columns=3:7)
+ggpairs(casas, columns = 3:7)
 ```
 
 
@@ -66,9 +64,8 @@ casas$bathrooms[1:10]
 ```
 Como podemos observar la columna bathrooms posee valores inconsistentes ya que no tiene sentido que una casa tenga 4.5 baños. 
 
-Modifique la columna bathrooms para que solo posea valores enteros.
+Modifique la columna bathrooms para que solo posea valores enteros
 
-Pista: utilice la función `round`
 ```{r}
 # Escriba su código aqui
 ```
@@ -107,11 +104,13 @@ La siguiente función realiza el escalado de valores
 
 ```{r}
 feature_scaling <- function(x) {
-  return ((x - min(x)) / (max(x) - min(x)))
+  x_escalado <- ((x - min(x)) / (max(x) - min(x)))
+  return(x_escalado)
 }
 ```
 
-Utilice la función `feature_scaling` para escalar los valores de la columna sqft_lot
+1. Utilice la función `feature_scaling` para escalar los valores de la columna sqft_lot
+2. Compare el resultado con la función `scale()`
 
 ```{r}
 # Escriba su código aqui
