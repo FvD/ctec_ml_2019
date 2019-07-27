@@ -1,0 +1,140 @@
+---
+title: "Preparación de los datos"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 
+
+# Breve introducción a ggpairs
+
+`ggpairs()` es una función de la librería GGally que permite crear matrices de gráficos y es realmente útil en la etapa de análisis y exploración de los datos. Pueden encontrar más información sobre `ggpairs()` y GGally en el siguiente enlace https://ggobi.github.io/ggally/#ggally
+
+El siguiente ejemplo muestra el gráfico de las correlaciones y densidades de algunos atributos del dataset de ventas de casas.
+
+```{r}
+library(GGally)
+library(ggplot2)
+
+casas <- read.csv('kc_house_data.csv', header = T, na.strings = '?')
+ggpairs(casas, columns = 3:7)
+```
+
+
+# Limpieza y transformación de los datos
+
+A continuación utilizando el dataset de venta de casas veremos algunas funcionalidades de R para la transformación de datos.
+
+### Detección de valores faltantes y transformaciones
+
+La función `is.na` nos permite detectar los valores faltantes en un dataset.
+
+El siguiente código muestra el número de elementos faltantes en todo un dataset
+
+`sum(is.na(dataset))`
+
+
+También podemos buscar valores faltantes en columnas especificas
+
+`sum(is.na(dataset$columna))`
+
+
+R posee funciones para modificar dataframes las cuales podemos aprovechar para el tratamiento de valores faltantes y transformaciones
+
+Podemos asignar valores nuevos a toda una columna.
+
+`dataframe$columna <- 0`
+
+`dataframe$columna <- funcion(dataframe$columna)`
+
+O podemos hacerlo solo en los campos faltantes.
+
+`dataframe$columna[is.na(dataframe$columna)] <- 0`
+
+`dataframe$columna[is.na(dataframe$columna)] <- funcion(dataframe$columna)`
+
+# Ejercicios sobre transformaciones
+
+### 1. Correción de valores inconsistentes
+```{r}
+casas$bathrooms[1:10]
+```
+Como podemos observar la columna bathrooms posee valores inconsistentes ya que no tiene sentido que una casa tenga 4.5 baños. 
+
+Modifique la columna bathrooms para que solo posea valores enteros
+
+```{r}
+# Escriba su código aqui
+```
+
+### 2. Llevar los datos a distribución normal.
+
+Modifique la columna price del dataset de precios de casas para que siga una distribución normal. Pista: utilice la función `log10`
+
+```{r}
+# Precios antes de la modificación
+hist(casas$price)
+# Escriba su codigo aqui
+# ...
+# Precios normalmente distribuidos
+hist(casas$price)
+```
+
+Note que ahora los precios ya no se agrupan a la izquierda.
+
+### 3. Imputar datos faltantes
+
+Reemplace los valores faltantes de la columna sqft_living con la mediana de los valores de esa columna. Pista use la función `median`.
+
+Nota: este dataset no posee valores faltantes pero para efectos del ejercicio esto no nos afecta ya que el código sería igual.
+
+```{r}
+# Escriba su código aqui
+```
+
+
+### 4. Escalado
+
+Un proceso común en esta etapa es escalar los atributos para que los valores queden en el rango de 0-1.
+
+La siguiente función realiza el escalado de valores
+
+```{r}
+feature_scaling <- function(x) {
+  x_escalado <- ((x - min(x)) / (max(x) - min(x)))
+  return(x_escalado)
+}
+```
+
+1. Utilice la función `feature_scaling` para escalar los valores de la columna sqft_lot
+2. Compare el resultado con la función `scale()`
+
+```{r}
+# Escriba su código aqui
+```
+
+### 5. Normalización con la función z-score
+
+Otra función utilizada para transformar atributos se llama z-score y consiste en restar la media de los datos y dividir por la desviación estandar.
+
+Escriba la función z_score y utilicela sobre la columna bathrooms. 
+
+Pista: utilice las funciones `mean`, `sd`
+
+```{r}
+# Datos antes de la transformación
+hist(casas$bathrooms)
+# Escriba su código aqui
+# ...
+# Después de la transformación
+hist(casas$bathrooms)
+```
+
+Note que ahora la media de los datos se acerca a 0
+
+
+
+
