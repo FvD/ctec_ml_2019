@@ -3,8 +3,8 @@
 
 Siga el siguiente documento y escriba el código en las secciones señaladas.
 
-### Autores
-   * Efrén Jiménez
+### Estudiante
+   * Brian Durán
 
 ## Análisis del Problema
 Este conjunto de datos contiene precios de venta de casas para el Condado de King, que incluye Seattle. Incluye casas vendidas entre mayo de 2014 y mayo de 2015.
