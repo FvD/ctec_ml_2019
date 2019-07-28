@@ -1,0 +1,124 @@
+---
+title: "Preprocesamiento"
+author: "Frans van Dunné"
+date: "7/27/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+library(GGally)
+library(visdat)
+```
+
+## Leemos datos
+
+Comentario: Nunca usar options(warn -1) o supressWarnings()
+
+```{r}
+casas_df <- read.csv("datos/kc_house_data.csv")
+
+read_csv("datos/kc_house_data.csv")
+
+casas <- read_csv("datos/kc_house_data.csv",
+                  col_types = cols(
+                    .default = col_double(),
+                    id = col_character()
+                  #  date = col_datetime(format = "")
+))
+```
+
+
+## Inspeccion visual
+
+```{r}
+ggpairs(casas)
+```
+
+Como podemos hacer esto mas rapido? Que si tenemos 3 millones de filas?
+
+
+
+```{r}
+ggpairs(casas %>% 
+          select( -id) %>% 
+          sample_n(1000))
+```
+
+Datos faltantes
+
+```{r}
+vis_dat(casas)
+vis_dat(airquality)
+```
+
+
+## Outliers
+
+```{r}
+boxplot(casas$price)
+```
+
+## Transformaciones
+
+```{r}
+hist(casas$price)
+qqnorm(casas$price)
+qqline(casas$price)
+densidad <- density(casas$price)
+plot(densidad)
+```
+
+### zscores
+
+```{r}
+z_price <- scale(casas$price, center = TRUE, scale = TRUE)
+
+plot(casas$price ~ z_price)
+```
+
+### softmax
+
+wikipedia:
+
+```{r}
+z <- c(1.0, 2.0, 3.0, 4.0, 1.0, 2.0, 3.0)
+softmax <- exp(z)/sum(exp(z))
+softmax
+```
+
+Pero porque no funciona con nuestros datos de precios?
+
+```{r}
+softmax_price <- exp(casas$price) / sum(exp(casas$price))
+plot(casas$price ~ softmax_price)
+```
+
+### Logaritmos
+
+naturual
+
+```{r}
+ln_price <- log(casas$price)
+plot(casas$price ~ ln_price)
+```
+
+base 10
+
+```{r}
+log_price <- log10(casas$price)
+plot(casas$price ~ log_price)
+```
+
+¿Pregunta como saco el logaritmo base 10 del siguiente vector?
+
+```{r}
+ejemplo <- c(1.0, -2.0, 3.0, 4.0, -1.0, 2.0, 3.0)
+log_ejemplo <- log10(ejemplo)
+plot(ejemplo ~ log_ejemplo)
+```
+
