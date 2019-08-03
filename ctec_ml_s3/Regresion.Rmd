@@ -1,0 +1,81 @@
+---
+title: "Regresion"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tarea 3.
+# Regresión lineal
+
+Análisis del Problema
+
+El desempeño de un automóvil se puede medir de diferentes formas. Algunas comunes son la cantidad de caballos de fuerza y el rendimiento del mismo, que se puede resumir en cuantas millas puede recorrer el automóvil por cada galón de combustible que consume. Para los clientes, potenciales compradores de un automóvil, este rendimiento es importante pues puede ayudar a tomar una decisión con respecto a cuál automóvil comprar (si, por ejemplo, el cliente quiere un auto que rinda por muchas millas y pueda economizar en la compra de combustible).
+
+Desde este punto de vista, tanto a clientes como a fabricadores de automóviles, les conviene entender cuál es la relación entre diferentes características del automóvil y su rendimiento, pues el conocer estas relaciones les puede ayudar a inferir cuál va a ser la eficiencia del vehículo a partir de ver los valores de otras características. Para fabricantes, puede ser importante conocer estas relaciones para saber cómo hacer cada modelo más eficiente con respecto al anterior.
+
+Entendimiento de los Datos
+
+Con el fin de analizar y tratar de estimar las millas por galón de diferentes modelos de automóviles, se trabajó con un conjunto de datos que contiene 398 observaciones y 9 variables:
+
+- mpg (millas por galón): numérica, con un rango de 9 a 46.60.
+- cyl (cilindraje): categórica ordinal, con valores posibles de 3, 4, 5, 6 y 8.
+- disp (desplazamiento): numérica, con un rango de 68 a 455.
+- hp (caballos de fuerza): numérica, con un rango de 46 a 230 y 6 valores faltantes.
+- weight (peso): numérica, con un rango de 1613 a 5140.
+- acc (aceleración): numérica, con un rango de 8 a 24.80.
+- model year (año): categórica, con 13 valores diferentes representando el año del automóvil.
+- origin (origen): categórica, 3 valores posibles: 1, 2, 3.
+- model name (nombre del modelo): categórica, con 305 posibles valores.
+
+# Ejercicios 
+
+1. Cargue el archivo auto-mpg_g.csv en una variable
+
+```{r}
+# Escriba su código aqui
+```
+
+2. Utilizando Ggpairs cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
+
+```{r}
+# Escriba su código aqui
+```
+
+3. Separe los datos en 2 conjuntos, uno de entrenamiento y otro de pruebas. Normalmente se trabaja utilizando un 70-80% de los datos para entrenamiento y el resto para pruebas.
+
+Recuerde fijar una semilla para que el documento sea reproducible.
+
+Pista: https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/sample.split
+```{r}
+# Escriba su código aqui
+```
+
+4. Cree un modelo de regresion lineal utilizando el atributo mpg como la variable objetivo y en base a las correlaciones observadas en el gráfico del punto 2 escoja al menos dos atributos para usarlos como variables predictoras para el modelo.
+
+Pista: https://www.rdocumentation.org/packages/lessR/versions/1.9.8/topics/reg
+
+Nota: Al crear el modelo utilice el conjunto de datos de entrenamiento definido en el punto 3.
+
+```{r}
+# Escriba su código aqui
+```
+
+5. Realice predicciones utilizando el conjunto de pruebas y evalue el resultado con la métrica MSE.
+
+Pista: https://www.rdocumentation.org/packages/mltools/versions/0.3.5/topics/mse
+```{r}
+library(Metrics)
+# Escriba su código aqui
+```
+
+6. Opcional
+
+6.a Pruebe varios modelos que utilicen diferentes variables y comparar los resultados obtenidos
+
+6.b Investigar como implementar en R las técnicas de preprocesado y normalización vistas en clase y aplicarlas a los datos antes de pasarlos al modelo.
+
+
+
