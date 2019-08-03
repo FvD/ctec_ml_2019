@@ -149,10 +149,10 @@ hist(casas$bathrooms)
 
 bathrooms_media <- mean(casas$bathrooms)
 desviacion_estandar <- sd(casas$bathrooms)
-casas$bathrooms <- (casas$bathrooms - bathrooms_media) / desviacion_estandar
+z_score <- ((casas$bathrooms - bathrooms_media) / desviacion_estandar)
 
 # Después de la transformación
-hist(casas$bathrooms)
+hist(z_score)
 
 ```
 
