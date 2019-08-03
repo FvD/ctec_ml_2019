@@ -132,7 +132,9 @@ scale_result <- scale(casas$sqft_lot)
 hist(scale_result)
 ```
 
-Se puede apreciar que aunque los datos en el eje $x$ varian, la proporción de la escala resultante es muy similar al utilzar los métodos `feature_scaling` y `scale`. La función `feature_scaling` utiliza el método de normalización de **mínimos y máximos** (*min-max normalization*) mientras que `scale`, de acuerdo con la documentación, utiliza una variación de la **normalización de la media** (*Mean normalization*) llamado **estandarización** (*standardization*).
+Se puede apreciar que los datos en el eje $x$ varian en cada función, utilizando `feature_scaling` cada rango aumenta $0.2$, mientras que usando `scale` aumentan en multiplos de $5$. Además mientras que `feature_scaling` muestra un rango de 0 a 1, `scale` presenta números negativos en el gráfico.
+
+Por último la función `feature_scaling` utiliza el método de normalización de **mínimos y máximos** (*min-max normalization*) mientras que `scale`, de acuerdo con la documentación, utiliza una variación de la **normalización de la media** (*Mean normalization*) llamado **estandarización** (*standardization*).
 
 
 ### 5. Normalización con la función z-score
@@ -147,12 +149,14 @@ Pista: utilice las funciones `mean`, `sd`
 # Datos antes de la transformación
 hist(casas$bathrooms)
 
-bathrooms_media <- mean(casas$bathrooms)
-desviacion_estandar <- sd(casas$bathrooms)
-z_score <- ((casas$bathrooms - bathrooms_media) / desviacion_estandar)
+z_score <- function(x) {
+  media <- mean(x)
+  desviacion_estandar <- sd(x)
+  return((x - media) / desviacion_estandar)
+}
 
 # Después de la transformación
-hist(z_score)
+hist(z_score(casas$bathrooms))
 
 ```
 
