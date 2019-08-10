@@ -9,7 +9,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 
 
-# Breve introducción a ggpairs
+
+### Estudiante
+* Brian Durán
+
+### Breve introducción a ggpairs
 
 `ggpairs()` es una función de la librería GGally que permite crear matrices de gráficos y es realmente útil en la etapa de análisis y exploración de los datos. Pueden encontrar más información sobre `ggpairs()` y GGally en el siguiente enlace https://ggobi.github.io/ggally/#ggally
 
@@ -67,8 +71,11 @@ Como podemos observar la columna bathrooms posee valores inconsistentes ya que n
 Modifique la columna bathrooms para que solo posea valores enteros
 
 ```{r}
-# Escriba su código aqui
+head(casas$bathrooms)
+casas$bathrooms <- as.integer(casas$bathrooms)
+head(casas$bathrooms)
 ```
+
 
 ### 2. Llevar los datos a distribución normal.
 
@@ -77,8 +84,9 @@ Modifique la columna price del dataset de precios de casas para que siga una dis
 ```{r}
 # Precios antes de la modificación
 hist(casas$price)
-# Escriba su codigo aqui
-# ...
+
+casas$price <- log10(casas$price)
+
 # Precios normalmente distribuidos
 hist(casas$price)
 ```
@@ -92,7 +100,8 @@ Reemplace los valores faltantes de la columna sqft_living con la mediana de los 
 Nota: este dataset no posee valores faltantes pero para efectos del ejercicio esto no nos afecta ya que el código sería igual.
 
 ```{r}
-# Escriba su código aqui
+mediana <- median(casas$sqft_living)
+casas$sqft_living[is.na(casas$sqft_living)] <- mediana
 ```
 
 
@@ -110,11 +119,23 @@ feature_scaling <- function(x) {
 ```
 
 1. Utilice la función `feature_scaling` para escalar los valores de la columna sqft_lot
+```{r}
+hist(casas$sqft_lot)
+feature_scaling_result <- feature_scaling(casas$sqft_lot)
+hist(feature_scaling_result)
+```
+
 2. Compare el resultado con la función `scale()`
 
 ```{r}
-# Escriba su código aqui
+scale_result <- scale(casas$sqft_lot)
+hist(scale_result)
 ```
+
+Se puede apreciar que los datos en el eje $x$ varian en cada función, utilizando `feature_scaling` cada rango aumenta $0.2$, mientras que usando `scale` aumentan en multiplos de $5$. Además mientras que `feature_scaling` muestra un rango de 0 a 1, `scale` presenta números negativos en el gráfico.
+
+Por último la función `feature_scaling` utiliza el método de normalización de **mínimos y máximos** (*min-max normalization*) mientras que `scale`, de acuerdo con la documentación, utiliza una variación de la **normalización de la media** (*Mean normalization*) llamado **estandarización** (*standardization*).
+
 
 ### 5. Normalización con la función z-score
 
@@ -127,10 +148,16 @@ Pista: utilice las funciones `mean`, `sd`
 ```{r}
 # Datos antes de la transformación
 hist(casas$bathrooms)
-# Escriba su código aqui
-# ...
+
+z_score <- function(x) {
+  media <- mean(x)
+  desviacion_estandar <- sd(x)
+  return((x - media) / desviacion_estandar)
+}
+
 # Después de la transformación
-hist(casas$bathrooms)
+hist(z_score(casas$bathrooms))
+
 ```
 
 Note que ahora la media de los datos se acerca a 0
