@@ -59,9 +59,10 @@ Recuerde fijar una semilla para que el documento sea reproducible.
 
 Pista: https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/sample.split
 ```{r}
+set.seed(5)
 msk <- sample.split(mpg[,1], SplitRatio = 4/5, group = NULL)
-train = mpg[ msk,2:3]  # use output of sample.split to ...
-test  = mpg[!msk,2:3]
+train <- mpg[ msk,]  # use output of sample.split to ...
+test  <- mpg[!msk,]
 ```
 
 4. Cree un modelo de regresion lineal utilizando el atributo mpg como la variable objetivo y en base a las correlaciones observadas en el gráfico del punto 2 escoja al menos dos atributos para usarlos como variables predictoras para el modelo.
@@ -71,7 +72,9 @@ Pista: https://www.rdocumentation.org/packages/lessR/versions/1.9.8/topics/reg
 Nota: Al crear el modelo utilice el conjunto de datos de entrenamiento definido en el punto 3.
 
 ```{r}
-regresion <- lessR::reg(mpg ~ disp + weight, dframe=train)
+# regresion <- lessR::reg(mpg ~ disp + weight, data=train)
+# regresion
+regresion <- lm(mpg ~ disp + weight, data=train)
 ```
 
 5. Realice predicciones utilizando el conjunto de pruebas y evalue el resultado con la métrica MSE.
@@ -79,7 +82,8 @@ regresion <- lessR::reg(mpg ~ disp + weight, dframe=train)
 Pista: https://www.rdocumentation.org/packages/mltools/versions/0.3.5/topics/mse
 ```{r}
 library(Metrics)
-# Escriba su código aqui
+prediccion <- predict(regresion, test)
+error <- Metrics::mse(test$mpg, prediccion)
 ```
 
 6. Opcional
@@ -88,25 +92,3 @@ library(Metrics)
 
 6.b Investigar como implementar en R las técnicas de preprocesado y normalización vistas en clase y aplicarlas a los datos antes de pasarlos al modelo.
 
-
-
-```{r}
-library(MASS)
-data(cats)   # load cats data
-cats
-Y = cats[,1] # extract labels from the data
-msk = sample.split(Y, SplitRatio=3/4)
-msk
-table(Y,msk)
-t=sum( msk)  # number of elements in one class
-f=sum(!msk)  # number of elements in the other class
-stopifnot( round((t+f)*3/4) == t ) # test ratios
-
-# use results
-train = cats[ msk,2:3]  # use output of sample.split to ...
-test  = cats[!msk,2:3]  # create train and test subsets
-z = lda(train, Y[msk])  # perform classification
-table(predict(z, test)$class, Y[!msk]) # predicted & true labels
-
-# see also LogitBoost example
-```
