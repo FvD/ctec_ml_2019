@@ -14,7 +14,6 @@ library(GGally)
 library(caTools)
 library(lessR)
 library(Metrics)
-library(dplyr)
 ```
 
 # Tarea 3.
@@ -78,11 +77,6 @@ regresion <- lm(mpg ~ disp + weight, data=train)
 regresion
 ```
 
-### Residuos
-```{r}
-residuos <- residuals(regresion)
-```
-
 5. Realice predicciones utilizando el conjunto de pruebas y evalue el resultado con la métrica MSE.
 
 Pista: https://www.rdocumentation.org/packages/mltools/versions/0.3.5/topics/mse
@@ -91,6 +85,10 @@ prediccion <- predict(regresion, test)
 error <- Metrics::mse(test$mpg, prediccion)
 error
 ```
+
+### Análisis
+
+Se realizó una regresión lineal para el atributo mpg con 2 variables predictoras, desplazamiento y peso (*disp y weight*); las cuales poseían las correlaciones más relevantes con relación a la variable principal (**mayores correlaciones negativas**). Este modelo, tal y como se solicitó, se creó utilizando el set de datos de entrenamiento (equivalente a un 80% de los datos) y luego se realizaron las predicciones correspondientes con el conjunto de datos destinados para pruebas. Al calcular el **mse** se obtiene un valor alto, pero también hay que considerar los datos no han sdo normalizados aún.
 
 6. Opcional
 
@@ -103,8 +101,48 @@ mayor_error <- Metrics::mse(test$mpg, mala_prediccion)
 mayor_error
 ```
 
+Al crear un modelo con los attributos *aceleración* y *origen* como variables predictores, se obtiene que el **mse** es aún mayor, lo cual era lo esperado ya que las correlaciones de dichas variables con **mpg** no son relevantes (son las más cercanas a cero)
+
 6.b Investigar como implementar en R las técnicas de preprocesado y normalización vistas en clase y aplicarlas a los datos antes de pasarlos al modelo.
 
 ```{r}
-datos_autos %>% filter(is.na(hp))
+datos_autos_normalizados <- read.csv("auto-mpg_g.csv")
+
+datos_autos_normalizados$disp <- log(datos_autos_normalizados$disp)
+datos_autos_normalizados$weight <- log(datos_autos_normalizados$weight)
+
+hist(datos_autos_normalizados$disp, main="Desplazamiento original")
+hist(datos_autos_normalizados$disp, main="Desplazamiento Normalizado")
+
+hist(datos_autos_normalizados$weight, main="Peso original")
+hist(datos_autos_normalizados$weight, main="Peso Normalizado")
+
 ```
+
+Podemos ver que ahora el desplazamiento y el peso se acercan más a una distribución normal.
+
+Ahora generamos un set de datos de entrenamiento y pruebas:
+
+```{r}
+set.seed(1)
+relacion_dividida <- sample.split(datos_autos_normalizados[,1], SplitRatio = 4/5, group = NULL)
+entrenamiento <- datos_autos_normalizados[ relacion_dividida,]  # use output of sample.split to ...
+pruebas  <- datos_autos_normalizados[!relacion_dividida,]
+```
+
+Ahora creamos un nuevo modelo con el grupo de datos de entrenamiento:
+
+```{r}
+regresion_mejorada <- lm(mpg ~ disp + weight, data=entrenamiento)
+regresion_mejorada
+```
+
+Y generamos una predicción con los datos de prueba y obtenemos el error cuadrático medio (**mse**):
+
+```{r}
+prediccion_mejorada <- predict(regresion_mejorada, pruebas)
+menor_error <- Metrics::mse(pruebas$mpg, prediccion_mejorada)
+menor_error
+```
+
+Se puede apreciar que después de aplicar un logaritmo a las variables predictoras, el **mse** del modelo es menor. 
