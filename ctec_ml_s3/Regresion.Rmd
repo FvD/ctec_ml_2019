@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(GGally)
 library(caTools)
 library(lessR)
+library(Metrics)
+library(dplyr)
 ```
 
 # Tarea 3.
@@ -43,14 +45,14 @@ Con el fin de analizar y tratar de estimar las millas por galón de diferentes m
 1. Cargue el archivo auto-mpg_g.csv en una variable
 
 ```{r}
-mpg <- read.csv("auto-mpg_g.csv")
+datos_autos <- read.csv("auto-mpg_g.csv")
 head(mpg)
 ```
 
 2. Utilizando Ggpairs cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
 
 ```{r}
-ggpairs(mpg, columns = 1:8)
+ggpairs(datos_autos, columns = 1:8)
 ```
 
 3. Separe los datos en 2 conjuntos, uno de entrenamiento y otro de pruebas. Normalmente se trabaja utilizando un 70-80% de los datos para entrenamiento y el resto para pruebas.
@@ -59,10 +61,10 @@ Recuerde fijar una semilla para que el documento sea reproducible.
 
 Pista: https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/sample.split
 ```{r}
-set.seed(5)
-msk <- sample.split(mpg[,1], SplitRatio = 4/5, group = NULL)
-train <- mpg[ msk,]  # use output of sample.split to ...
-test  <- mpg[!msk,]
+set.seed(1)
+msk <- sample.split(datos_autos[,1], SplitRatio = 4/5, group = NULL)
+train <- datos_autos[ msk,]  # use output of sample.split to ...
+test  <- datos_autos[!msk,]
 ```
 
 4. Cree un modelo de regresion lineal utilizando el atributo mpg como la variable objetivo y en base a las correlaciones observadas en el gráfico del punto 2 escoja al menos dos atributos para usarlos como variables predictoras para el modelo.
@@ -72,23 +74,37 @@ Pista: https://www.rdocumentation.org/packages/lessR/versions/1.9.8/topics/reg
 Nota: Al crear el modelo utilice el conjunto de datos de entrenamiento definido en el punto 3.
 
 ```{r}
-# regresion <- lessR::reg(mpg ~ disp + weight, data=train)
-# regresion
 regresion <- lm(mpg ~ disp + weight, data=train)
+regresion
+```
+
+### Residuos
+```{r}
+residuos <- residuals(regresion)
 ```
 
 5. Realice predicciones utilizando el conjunto de pruebas y evalue el resultado con la métrica MSE.
 
 Pista: https://www.rdocumentation.org/packages/mltools/versions/0.3.5/topics/mse
 ```{r}
-library(Metrics)
 prediccion <- predict(regresion, test)
 error <- Metrics::mse(test$mpg, prediccion)
+error
 ```
 
 6. Opcional
 
 6.a Pruebe varios modelos que utilicen diferentes variables y comparar los resultados obtenidos
 
+```{r}
+mala_regresion <- lm(mpg ~ acc + origin, data=train)
+mala_prediccion <- predict(mala_regresion, test)
+mayor_error <- Metrics::mse(test$mpg, mala_prediccion)
+mayor_error
+```
+
 6.b Investigar como implementar en R las técnicas de preprocesado y normalización vistas en clase y aplicarlas a los datos antes de pasarlos al modelo.
 
+```{r}
+datos_autos %>% filter(is.na(hp))
+```
