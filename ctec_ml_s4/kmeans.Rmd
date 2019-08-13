@@ -1,0 +1,104 @@
+---
+title: "K-Means"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tarea 4.
+# Metodos no supervisados
+
+# Ejercicios 
+
+Librerias
+```{r}
+library('ggplot2')
+```
+
+1. Desarolle el Análisis del Problema
+```{r}
+# Construya el análisis del problema
+```
+Fuente del dataset:
+https://archive.ics.uci.edu/ml/datasets/Wholesale+customers
+
+
+2. Cargue el archivo Wholesale customers data.csv en una variable
+
+```{r}
+# Escriba su código aqui
+```
+
+3. Desarolle el Entendimiento de los Datos
+
+```{r}
+# Escriba su código aqui
+```
+
+4. Utilizando barplot cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
+
+```{r}
+# Escriba su código aqui
+```
+
+5. Explique el siguiente gráfico
+
+```{r}
+#Grafico
+#bxplt <- ggplot(data = melt(Wholesale), aes(x= variable, y = value))
+#bxplt <- bxplt + geom_boxplot()
+#bxplt <- bxplt + facet_wrap(~Channel)
+#bxplt <- bxplt + coord_flip()
+#bxplt <- bxplt + labs(x = 'producto', y  = 'ventas')
+#bxplt <- bxplt + ggtitle('Ventas por producto y por canal')
+#bxplt
+
+# Escriba su código aqui
+```
+
+6. Cree un modelo de agrupación K- Means
+Para agrupar a los clientes con base al consumo, vamos a utilizar solo las variables Fresh, Milk, Grocery, Frozen, Detergents_Paper y Delicassen. En este caso, vamos a intentar agrupar los clientes en 5 grupos diferentes.
+
+
+```{r}
+# Escriba su código aqui
+
+#5 Centroides utilizando k-means
+#modelo.agrupacion <- kmeans(Wholesale[,c(3:8)], centers = 5)
+
+#predecir utilizando el modelo para agregar una variable nueva llamada 'cluster' al conjunto de datos
+#Wholesale$cluster <- modelo.agrupacion$cluster
+
+#convertir la variable nueva a un factor
+#Wholesale$cluster <- factor(Wholesale$cluster)
+
+```
+
+6. Realice al menos 3 modelos cambiando los centroides 
+```{r}
+# Escriba su código aqui
+```
+
+7. Evaluacioón del modelo
+```{r}
+# Escriba su código aqui
+#Explicacion de los grupos generados
+#by(Wholesale, Wholesale$cluster, summary)
+```
+
+
+8. Desarolle al menos 5 conclusiones sobre los grupos realizados
+  * Ejemplo:
+    - Las principales características de cada grupo son:
+      - #### Grupo #1: (2do grupo más pequeño)
+      - Principalmente observaciones de la región 3 y el canal 1.
+      - Muy alto consumo de productos frescos.
+      - Bajo consumo de leche.
+      - Bajo consumo de comestibles.
+      - Alto consumo de alimentos congelados.
+      - Bajo consumo de detergentes.
+      - Bajo consumo de delicassen.
+
+
