@@ -13,8 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 # Ejercicios 
 
 Librerias
-```{r}
+```{r include=FALSE}
 library('ggplot2')
+library(dplyr)
+library(visdat)
 ```
 
 1. Desarolle el Análisis del Problema
