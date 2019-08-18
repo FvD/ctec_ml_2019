@@ -28,13 +28,17 @@ https://archive.ics.uci.edu/ml/datasets/Wholesale+customers
 2. Cargue el archivo Wholesale customers data.csv en una variable
 
 ```{r}
-# Escriba su código aqui
+datos <- read.csv("Wholesale.csv", header = TRUE)
+
 ```
 
 3. Desarolle el Entendimiento de los Datos
 
 ```{r}
-# Escriba su código aqui
+head(datos)
+glimpse(datos)
+summary(datos)
+vis_dat(datos)
 ```
 
 4. Utilizando barplot cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
