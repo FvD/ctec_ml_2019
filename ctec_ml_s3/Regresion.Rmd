@@ -1,10 +1,24 @@
 ---
 title: "Regresion"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(GGally)
+
+# para uso de la funcion sample.split
+library(caTools)
+
+# Para uso de la funcion reg
+library(lessR)
+
+library(visdat)
+
+library(Metrics)
 ```
 
 # Tarea 3.
@@ -35,23 +49,62 @@ Con el fin de analizar y tratar de estimar las millas por galón de diferentes m
 1. Cargue el archivo auto-mpg_g.csv en una variable
 
 ```{r}
-# Escriba su código aqui
+#Se cargan los datos
+autos <- read.csv('auto-mpg_g.csv', header = T)
+
+# Se visualizan los datos
+summary(autos)
 ```
+* <span style="color:blue;font-weight: bold">Se identifican variables que son categóricas y que están como numéricas: origin, model.year y cyl.</span>
+* <span style="color:blue;font-weight: bold">La variable hp, posee datos en 0.</span>
+
+```{r}
+vis_dat(autos)
+```
+
+* <span style="color:blue;font-weight: bold">No existen datos nulos en ninguna variable.</span>
 
 2. Utilizando Ggpairs cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
 
 ```{r}
-# Escriba su código aqui
+ggpairs(autos, 1:8)
+
 ```
+
+* <span style="color:blue;font-weight: bold">Las variables cyl y origin son categóricas (con tipo de dato numérico) que no muestran dispersión de los datos.</span>
+* <span style="color:blue;font-weight: bold">Las variables cyl, disp, hp y origin no muestran un comportamiento normal.</span>
+
 
 3. Separe los datos en 2 conjuntos, uno de entrenamiento y otro de pruebas. Normalmente se trabaja utilizando un 70-80% de los datos para entrenamiento y el resto para pruebas.
 
 Recuerde fijar una semilla para que el documento sea reproducible.
 
 Pista: https://www.rdocumentation.org/packages/caTools/versions/1.17.1/topics/sample.split
+
+* <span style="color:blue;font-weight: bold">Partición de los datos, se utiliza la etiqueta de la columna origin para particionarlos</span>
 ```{r}
-# Escriba su código aqui
+# # Setea la semilla para obtener los mismos resultados cada vez que se ejecuta 
+# la decision
+set.seed(2019)
+
+# Se crea el vector para partición de datos de entrenamiento / prueba
+indice <- sample.split(Y = autos$origin, SplitRatio = 0.80)
+
+# Se separan los datos de entrenamiento y pruebas
+autos_entrena <- subset(autos, indice == TRUE)
+autos_prueba <- subset(autos, indice == FALSE)
+
 ```
+
+* <span style="color:blue;font-weight: bold">Tabla con la distribución de la partición por la etiqueta utilizada (campo origin)</span>
+```{r}
+# Distribucion de la partición de acuerdo a la etiqueta utilizada 
+table(autos$origin, indice)
+```
+
+* <span style="color:blue;font-weight: bold">La partición de entrenamniento contiene `r nrow(autos_entrena)` filas (80%).</span>
+* <span style="color:blue;font-weight: bold">La partición de pruebas contiene `r nrow(autos_prueba)` filas (20%).</span>
+
 
 4. Cree un modelo de regresion lineal utilizando el atributo mpg como la variable objetivo y en base a las correlaciones observadas en el gráfico del punto 2 escoja al menos dos atributos para usarlos como variables predictoras para el modelo.
 
@@ -59,17 +112,52 @@ Pista: https://www.rdocumentation.org/packages/lessR/versions/1.9.8/topics/reg
 
 Nota: Al crear el modelo utilice el conjunto de datos de entrenamiento definido en el punto 3.
 
+* <span style="color:blue;font-weight: bold">Se utiliza la variable mpg como objetivo, y como variables predictoras se usan: disp y weight. Se identifican como las dos variables que tienen una correlaci+on fuerte negativa con la variable mpg, y no son categóricas</span>
+
 ```{r}
-# Escriba su código aqui
+# Se crea el modelo lineal 
+modelo <- lm(mpg ~ disp + weight, data = autos_entrena[,c(1,3,5)])
+summary(modelo)
+#modelo_reg <- reg(mpg ~ disp + weight, data = autos_entrena)
 ```
+
+* <span style="color:blue;font-weight: bold">Se identifica que la variable weight aporta más que la variable disp, ya que se aleja más de 0 en el valor Pr(> t)</span>
+
 
 5. Realice predicciones utilizando el conjunto de pruebas y evalue el resultado con la métrica MSE.
 
 Pista: https://www.rdocumentation.org/packages/mltools/versions/0.3.5/topics/mse
+
+* <span style="color:blue;font-weight: bold">Se obtiene la predicción con el conjunto de datos de prueba</span>
+
 ```{r}
-library(Metrics)
-# Escriba su código aqui
+# Predicción con el conjunto de datos de prueba
+pred <- predict(modelo, autos_prueba[,c(1,3,5)])
+summary(pred)
+
+# Calculo manual del RMSE del modelo
+sqrt(mean((modelo$fitted.values - autos_entrena$mpg )^2))
 ```
+
+* <span style="color:blue;font-weight: bold">Calcula la métrica MSE</span>
+```{r}
+# Evalua el resultado de la predicción con la métrica MSE
+mse(actual = autos_prueba$mpg, 
+             predicted = predict(modelo, autos_prueba[,c(1,3,5)]))  
+
+# Calculo manual del  MSE de la prediccion
+mean((pred - autos_prueba$mpg)^2)
+```
+
+
+* <span style="color:blue;font-weight: bold">Se tiene un valor de error cuadrático medio de 16.68, el cual debe aplicarsele la raiz cuadrada para obtener el valor a la escala de los datos.</span>
+
+```{r}
+sqrt(mse(actual = autos_prueba$mpg, 
+             predicted = predict(modelo, autos_prueba[,c(1,3,5)])))
+
+```
+* <span style="color:blue;font-weight: bold">Se tiene un valor el cual indica que se puede obtener una predicción de consumo de millas por galón, con un error de +- 4 millas por gallón .</span>
 
 6. Opcional
 
