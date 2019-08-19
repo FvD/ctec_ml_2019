@@ -207,13 +207,17 @@ table(datos$cluster,datos$Channel)
 * Grupo # 3 es que contiene menos elementos en el Canal 1 (HoReCa) y el Grupo 2 en el Canal 2 (Retail).
 
 * Relacional Grupo - Consumo Leche
+
 ```{r}
-#datos %>% 
-#  select(Milk,cluster) %>% 
-#  group_by(cluster) %>% 
-#  summarise(Suma = sum(Milk)) %>% 
-#  arrange(desc(Suma))
+datos %>% 
+  select(Milk,cluster) %>% 
+  group_by(cluster) %>% 
+  summarise(Suma = sum(Milk)) %>% 
+  arrange(desc(Suma))
 ```
+
+* El Grupo 3 es el canal donde se consume más leche.
+* El Grupo 1 es el canal donde se consume menos leche.
 
   
 
