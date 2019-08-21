@@ -1,0 +1,65 @@
+---
+title: "Random Forest"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tarea 5.
+# Metodos supervisados
+
+Librerias
+```{r}
+library(caTools)
+library(rpart)
+library(randomForest)
+```
+
+1. Desarolle el Análisis del Problema
+```{r}
+# Construya el análisis del problema
+
+
+# Este conjunto de datos incluye descripciones de muestras hipotéticas correspondientes a 23 especies de # hongos branquiales en el hongo de la familia Agaricus y Lepiota extraídas de la Guía de campo de la # # Sociedad Audubon de hongos de América del Norte (1981). Cada especie se identifica como definitivamente # comestible, definitivamente venenosa o de comestibilidad desconocida y no se recomienda. Esta última # # clase se combinó con la venenosa. La Guía establece claramente que no existe una regla simple para # # # determinar la comestibilidad de un hongo; ninguna regla como "folletos tres, que así sea" para el # roble venenoso y la hiedra.
+
+```
+Fuente del dataset:
+https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data
+
+1. Cargue el archivo agaricus_lepiota.data.csv en una variable
+
+```{r}
+# Escriba su código aqui
+```
+
+2. Desarolle el Entendimiento de los Datos
+
+```{r}
+# Escriba su código aqui
+```
+
+3. Utilizando barplot cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
+
+```{r}
+# Escriba su código aqui
+```
+
+
+4. Realice al menos 3 modelos vistos en clase
+```{r}
+# Escriba su código aqui
+```
+
+5. Evaluación del modelo
+```{r}
+# Escriba su código aqui
+
+```
+
+
+8. Desarolle al menos 3 conclusiones sobre las clasificaciones de los modelos
+
+
+
