@@ -1,0 +1,69 @@
+---
+title: "Clase 7"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tarea 7.
+# Validación
+
+Librerias
+```{r}
+#..........Librerias de los modelos
+```
+
+1. Desarolle el An?lisis del Problema
+```{r}
+# Construya el análisis del problema
+
+
+# Los datos se obtienen mediante el  parte oficial de tr?nsito que realiza la Direcci?n General de Polic?a de Tr?nsito al presentarse un accidente, los cuales ingresan a la base de datos de dos formas (hand held y papel). Debido a que parte de la labor principal de la Instituci?n es salvar vidas, y por los recursos limitados que existen, se trabaja solo con accidentes con heridos y/o fallecidos; y no se trabaja con accidentes que presentan solo da?os materiales. Adem?s, posteriormente inicia el proceso de limpieza, correcci?n de inconsistencias, validaci?n de algunas variables,  georeferenciaci?n de los accidentes, entre otros.
+
+
+#Accidente con v?ctima se refiere cuando en el accidente de tr?nsito al menos uno de los participantes resulto: herido leve, grave o fallecido.
+
+#Para m?s informaci?n revisar la metodolog?a del documento Memoria estad?stica de accidentes de tr?nsito con v?ctimas.Periodo 2012-2014.
+
+```
+Fuente del dataset:
+http://datosabiertos.csv.go.cr/dashboards/19683/accidentes/
+
+1. Cargue el archivo nombre.csv en una variable
+
+```{r}
+# Escriba su c?digo aqui
+```
+
+2. Desarolle el Entendimiento de los Datos
+
+```{r}
+# Escriba su c?digo aqui
+```
+
+3. Utilizando barplot cree un gr?fico de los atributos del dataset, observe las correlaciones entre atributos
+
+```{r}
+# Escriba su c?digo aqui
+```
+
+
+4. Realice al menos 5 modelos de los observados en clase
+```{r}
+# Escriba su c?digo aqui
+```
+
+5. Evaluaci?n de los modelos
+```{r}
+# Escriba su c?digo aqui
+# Matriz de confusion y Curva ROCK
+
+```
+
+
+6. Desarolle al menos 5 conclusiones sobre las clasificaciones de los modelos basado en la evaluación
+
+
+
