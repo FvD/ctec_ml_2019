@@ -13,14 +13,25 @@ knitr::opts_chunk$set(echo = TRUE)
 # Ejercicios 
 
 Librerias
-```{r}
+```{r include=FALSE}
 library('ggplot2')
+library(dplyr)
+library(visdat)
+library(GGally)
+library(reshape2)
+library(readr)
+library(factoextra)
 ```
 
 1. Desarolle el Análisis del Problema
 ```{r}
 # Construya el análisis del problema
+
 ```
+* Este es un conjunto de datos que se refiere a los clientes de un distribuidor mayorista, que inluye el gasto anual en unidades monetarias en diversas categorias de productos. 
+* Lo que se desea realizar es un análisis de agrupamiento utilizando metodos como el KMEANS y proporcionar inferencia.
+
+
 Fuente del dataset:
 https://archive.ics.uci.edu/ml/datasets/Wholesale+customers
 
@@ -28,57 +39,137 @@ https://archive.ics.uci.edu/ml/datasets/Wholesale+customers
 2. Cargue el archivo Wholesale customers data.csv en una variable
 
 ```{r}
-# Escriba su código aqui
+datos <- read.csv("Wholesale.csv", header = TRUE)
 ```
+
+
 
 3. Desarolle el Entendimiento de los Datos
 
+* Se reliza un análisis de la variables del conjunto de datos. Se identifican 8 variables con 440 observaciones, que se detallan a continuación:
 ```{r}
-# Escriba su código aqui
+glimpse(datos)
 ```
+
+* Se identifican 2 variables que son factores (Channel y Region) que están con tipo de dato entero (int), se convierten a factor con sus respecticas etiquetas.
+  * Factor Channel -> 1 = HoReCa (Hotel/Restaurant/Cafe) y 2= Retail.
+  * Factor Region -> 1 = Lisbon, 2 = Oporto y 3= Other Region.
+```{r}
+datos$Channel <- factor(datos$Channel, 
+                        levels = c(1,2),
+                        labels = c("HoReCa","Retail")) 
+
+datos$Region <- factor(datos$Region, 
+                       levels = c(1,2,3),
+                       labels = c("Lisbon","Oporto","Other Region")) 
+
+
+
+```
+
+* Se muestra la frecuencia de las variables categóricas que son factores
+```{r}
+table(datos$Channel)
+table(datos$Region)
+```
+
+
+* Se visualiza la conversión de las variables cetagóricas y sus etiquetas
+```{r}
+head(datos)
+```
+
+* Se visualiza un resumen de los datos, para visualizar los rangos, la media y los cuartiles
+```{r}
+summary(datos)
+```
+
+* Se verifican los tipos de datos y la existencia de nulos.
+```{r}
+vis_dat(datos)
+```
+
 
 4. Utilizando barplot cree un gráfico de los atributos del dataset, observe las correlaciones entre atributos
 
+* Se genera gráfico de correlaciones
 ```{r}
-# Escriba su código aqui
+ggpairs(datos)
+
 ```
+* Se identifican las siguientes correlaciones:
+  * Correlación positiva débil: 
+
+
+* Se genera barplot de las variables, se excluyen las categoricas
+```{r}
+barplot(scale(datos[,c(3:8)]))
+```
+
 
 5. Explique el siguiente gráfico
 
 ```{r}
 #Grafico
-#bxplt <- ggplot(data = melt(Wholesale), aes(x= variable, y = value))
-#bxplt <- bxplt + geom_boxplot()
-#bxplt <- bxplt + facet_wrap(~Channel)
-#bxplt <- bxplt + coord_flip()
-#bxplt <- bxplt + labs(x = 'producto', y  = 'ventas')
-#bxplt <- bxplt + ggtitle('Ventas por producto y por canal')
-#bxplt
-
-# Escriba su código aqui
+bxplt <- ggplot(data = melt(datos), aes(x= variable, y = value))
+bxplt <- bxplt + geom_boxplot()
+bxplt <- bxplt + facet_wrap(~Channel)
+bxplt <- bxplt + coord_flip()
+bxplt <- bxplt + labs(x = 'producto', y  = 'ventas')
+bxplt <- bxplt + ggtitle('Ventas por producto y por canal')
+bxplt
 ```
+
+* Básicamente es un diagarama de cajas que muestra un resumen de ciertos valores(mediana, minimo máximo, cuartiles 1ero 3ero y los valores extremos) como en el summary solo que visualmente,  nos permite identificar visualmente la distribución de los valores de las diferentes variables en nuestro conjunto de datos. 
+
+* De acuerdo a los datos podemos identificar lo siguiente:
+  * Los valores extremos en la mayoria de las variables se ubican en el 4to cuartil.
+  * Los valores extremos más grandes se encuentran en las variables Grocery (Channel 2 ) y Fresh (Channel 1).
+  * La dispersión de datos alrededor de la mediana es mas pequeña en el Channel 1 (HoReCa).
+  * Las 2 variables con mayor dispesion de datos con respecto a la mediana son Grocery(Channel 2) y Fresh (Cannel 1), coincidiendo con los valores extremos más grandes (hay una correlación).
+  * El variable Fresh (productos Frescos), es la que presenta mayor dispesión con respecto a su mediana, caso contrario la variable Delicassen (productos "delicados" )
+  
+  
 
 6. Cree un modelo de agrupación K- Means
 Para agrupar a los clientes con base al consumo, vamos a utilizar solo las variables Fresh, Milk, Grocery, Frozen, Detergents_Paper y Delicassen. En este caso, vamos a intentar agrupar los clientes en 5 grupos diferentes.
 
 
 ```{r}
-# Escriba su código aqui
+set.seed(2019)
 
 #5 Centroides utilizando k-means
-#modelo.agrupacion <- kmeans(Wholesale[,c(3:8)], centers = 5)
+modelo.agrupacion <- kmeans(datos[,c(3:8)], centers = 5)
 
 #predecir utilizando el modelo para agregar una variable nueva llamada 'cluster' al conjunto de datos
 #Wholesale$cluster <- modelo.agrupacion$cluster
+datos <- datos %>% 
+  mutate(cluster = modelo.agrupacion$cluster)
 
 #convertir la variable nueva a un factor
 #Wholesale$cluster <- factor(Wholesale$cluster)
+datos$cluster <- factor(datos$cluster)
+
+# Visualización gráfica de los grupos
+fviz_cluster(modelo.agrupacion, data = datos[,c(3:8)])
 
 ```
 
 6. Realice al menos 3 modelos cambiando los centroides 
 ```{r}
-# Escriba su código aqui
+# Modelo 1 con centroide 4
+modelo.agrupacion_1 <- kmeans(datos[,c(3:8)], centers = 4)
+fviz_cluster(modelo.agrupacion_1, data = datos[,c(3:8)])
+
+# Modelo 1 con centroide 2
+modelo.agrupacion_2 <- kmeans(datos[,c(3:8)], centers = 2)
+fviz_cluster(modelo.agrupacion_2, data = datos[,c(3:8)])
+
+# Modelo 1 con centroide 3
+modelo.agrupacion_3 <- kmeans(datos[,c(3:8)], centers = 3)
+fviz_cluster(modelo.agrupacion_3, data = datos[,c(3:8)])
+
+
 ```
 
 7. Evaluacioón del modelo
@@ -86,6 +177,10 @@ Para agrupar a los clientes con base al consumo, vamos a utilizar solo las varia
 # Escriba su código aqui
 #Explicacion de los grupos generados
 #by(Wholesale, Wholesale$cluster, summary)
+
+#as.data.frame ( 
+  aggregate(datos[,c(3:8)], by = list(cluster = modelo.agrupacion$cluster ), summary)#)
+
 ```
 
 
@@ -100,5 +195,30 @@ Para agrupar a los clientes con base al consumo, vamos a utilizar solo las varia
       - Alto consumo de alimentos congelados.
       - Bajo consumo de detergentes.
       - Bajo consumo de delicassen.
+
+* Relacional Grupo - Canal
+```{r}
+table(datos$cluster,datos$Channel)
+```
+
+* Grupo # 1 es el que contiene más elementos
+* Grupo # 3 es el que contienen menos elementos
+* Grupo # 1 es que contiene más elementos en el Canal 1 (HoReCa) y el Grupo # 4 en el Canal 2 (Retail).
+* Grupo # 3 es que contiene menos elementos en el Canal 1 (HoReCa) y el Grupo 2 en el Canal 2 (Retail).
+
+* Relacional Grupo - Consumo Leche
+
+```{r}
+datos %>% 
+  select(Milk,cluster) %>% 
+  group_by(cluster) %>% 
+  summarise(Suma = sum(Milk)) %>% 
+  arrange(desc(Suma))
+```
+
+* El Grupo 3 es el canal donde se consume más leche.
+* El Grupo 1 es el canal donde se consume menos leche.
+
+  
 
 

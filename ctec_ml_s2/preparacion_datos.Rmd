@@ -68,6 +68,8 @@ Modifique la columna bathrooms para que solo posea valores enteros
 
 ```{r}
 # Escriba su código aqui
+casas$bathrooms <- round(casas$bathrooms)
+casas$bathrooms[1:30]
 ```
 
 ### 2. Llevar los datos a distribución normal.
@@ -79,6 +81,7 @@ Modifique la columna price del dataset de precios de casas para que siga una dis
 hist(casas$price)
 # Escriba su codigo aqui
 # ...
+casas$price <- log10(casas$price)
 # Precios normalmente distribuidos
 hist(casas$price)
 ```
@@ -93,6 +96,7 @@ Nota: este dataset no posee valores faltantes pero para efectos del ejercicio es
 
 ```{r}
 # Escriba su código aqui
+casas$sqft_living[is.na(casas$sqft_living)] <- median(casas$sqft_living, na.rm = TRUE)
 ```
 
 
@@ -114,8 +118,32 @@ feature_scaling <- function(x) {
 
 ```{r}
 # Escriba su código aqui
-```
+#Respaldo de datos
+bck_sqft_lot <- casas$sqft_lot
 
+#1. feature scaling
+casas$sqft_lot <- feature_scaling (casas$sqft_lot)
+summary(casas$sqft_lot)
+
+```
+* Respuesta 1: La función feature_scaling escala los valores en un rango de 0 a 1
+
+
+```{r}
+# Cálculo de z-score
+res_sqft_lot <- scale(bck_sqft_lot)
+summary(as.numeric(res_sqft_lot))
+```
+* Respuesta 2: la funcion scale() ó scale (x,scale = TRUE, center = TRUE), lo que hace es calcular un z-score. Podemos determinar lo siguiente:
+
+|CARACTERÍSTICA| SCALE()                             |       FEATURE_SCALING()
+|--------------| ----------------------------------- | -----------------------------------------------------
+|Cálculo       | Representa normalización z-score    | Representa normalizacion/escalado mínimos-máximos
+|Promedio      | El valor tiende a 0                 | Es mayor a 0
+|Rango escalado| Rango mínimo negativo y un rango máximo positivo que puede ser mayor a 1 | Está entre 0 y 1
+|Función en R  | scale (data = x, scale=TRUE, center=TRUE) | 
+                
+      
 ### 5. Normalización con la función z-score
 
 Otra función utilizada para transformar atributos se llama z-score y consiste en restar la media de los datos y dividir por la desviación estandar.
@@ -129,6 +157,14 @@ Pista: utilice las funciones `mean`, `sd`
 hist(casas$bathrooms)
 # Escriba su código aqui
 # ...
+# Funcion z_score
+z_score <- function(x) {
+  x_escalado <- ((x - mean(x)) / sd(x) )
+  return(x_escalado)
+}
+# Variable bathrooms con funcion z_score
+casas$bathrooms <- z_score(casas$bathrooms)
+summary(casas$bathrooms)
 # Después de la transformación
 hist(casas$bathrooms)
 ```

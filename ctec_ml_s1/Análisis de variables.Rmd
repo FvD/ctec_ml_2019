@@ -30,6 +30,8 @@ Ejemplo:
 
 ```{r}
 # Escriba su código aqui
+
+casas <- read.csv("kc_house_data.csv", header = T, na.strings = "?")
 ```
 
 Utilice la función summary sobre el dataset
@@ -40,6 +42,7 @@ Ejemplo:
 
 ```{r}
 # Escriba su código aqui
+summary(casas)
 ```
 
 ```{r}
@@ -60,12 +63,14 @@ Ejemplo
 
 ```{r}
 # Escriba su código aqui
+var_casas <- casas[,c(3,6)]
 ```
 
 Utilice la función summary sobre la nueva variable
 
 ```{r}
 # Escriba su código aqui
+summary(var_casas)
 ```
 
 Aplique la función de correlación para obtener las correlaciones entre las columnas seleccionadas (price, sqft_living)
@@ -76,6 +81,7 @@ Ejemplo:
 
 ```{r}
 # Escriba su código aqui
+cor(var_casas)
 ```
 
 ### Interpretando los resultados de la correlación
@@ -103,6 +109,8 @@ Ejemplo
 
 ```{r}
 # Escriba su código aqui
+cor(var_casas, method = "pearson")
+cor(var_casas, method = "spearman")
 ```
 
 ### Visualización
@@ -117,6 +125,8 @@ Ejemplo
 
 ```{r}
 # Escriba su código aqui
+plot(x = var_casas$sqft_living, y = var_casas$price, main = "Relación entre precio y metros cuadrados", 
+     xlab = "Metros Cuadrados", ylab = "Precio" )
 ```
 
 ## Conclusiones
