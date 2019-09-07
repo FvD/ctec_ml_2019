@@ -1,0 +1,40 @@
+---
+title: "Tarea 8"
+output: html_document
+---
+
+# Tarea final
+
+## Desarrolla una pregunta
+Identifica una pregunta que se pueda responder con un modelo de aprendizaje máquina supervisado utilizando los datos del sitio web http://datosabiertos.presidencia.go.cr/home.
+
+Puedes escoger datos de otras fuentes, pero tiene que ser sobre Costa y tienen que ser datos abiertos para que otra persona pueda reproducir el análisis.
+
+
+## Prepara los datos
+Ejecuta una exploración de datos para entender bien las variables que tienes disponibles y poder decidir cómo vas a responder tu pregunta. Es posible que tengas que cambiar la pregunta ligeramente (¡o mucho!), si es el caso describe el proceso y tu razonamiento para los cambios.
+
+Al final decide por 2 métodos de aprendizaje automático que son relevantes para la preguntas que quieres hacer.
+
+
+## Desarrollo modelos
+Desarolla 2 modelos de aprendizaje automatizado (supervisado o no supervisado). Recuerda utilizar la metodologia CRISP-DM para implementar los modelos. Si buscas inspiración toma en cuenta que existe un repositorio de github https://github.com/SCRUG/DCC para tomar ideas sobre que modelos desarrollar con este tipo de datos.
+
+Al final compara el desempeño de los dos modelos. Si es un método no supervisado el desempeño lo puedes describir como tu capacidad de responder la pregunta con una u otra (hay menos métricas y metodologías para hacer una comparación numérica).
+
+
+
+### Calificación
+
+* Desarrollo pregunta 25 %
+    + Comprensión del problema
+    + Desarrollo pregunta
+* Analisis exloratorio 25 %
+    + Comprensión de los datos
+    + Decisión sobre metodos de analisis
+* Modelado 25%
+    + Preparación de los datos
+    + Modelado
+* Comparacion de modelos 25%
+    + Evaluación de diferencias
+    + Conclusiones
